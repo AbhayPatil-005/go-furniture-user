@@ -14,7 +14,7 @@ function App() {
     <Routes>
       <Route path='/signup' element={<SignUpPage/>}/>
       <Route path='/login' element={<LoginPage/>}/>
-      <Route path='/' element={isLoggedIn ? <HomePage/> : <Navigate to="/login" replace/>}>
+      <Route path='/' element={<HomePage/>}>
 
       </Route>
     </Routes>
