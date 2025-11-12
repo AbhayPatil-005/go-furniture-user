@@ -1,17 +1,22 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import LoginPage from './pages/auth/LoginPage';
 import SignUpPage from './pages/auth/SignUpPage';
 import { Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import HomePage from './pages/HomePage';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn);
 
   return (
     <>
     <Routes>
       <Route path='/signup' element={<SignUpPage/>}/>
+      <Route path='/login' element={<LoginPage/>}/>
+      <Route path='/' element={isLoggedIn ? <HomePage/> : <Navigate to="/login" replace/>}>
+
+      </Route>
     </Routes>
    
     </>

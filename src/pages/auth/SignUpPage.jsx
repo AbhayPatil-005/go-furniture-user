@@ -10,12 +10,31 @@ const SignUpPage = () => {
     const [toast, setToast] = useState({ show: false, message: "", variant: "", textColor: "" });
 
     const dispatch = useDispatch();
-    //   const navigate = useNavigate();
+    const navigate = useNavigate();
     const API_KEY = import.meta.env.VITE_USER_FIREBASE_AUTH_API_KEY;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        // Email and password validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(formData.email)) {
+            setToast({
+                show: true,
+                message: "Please enter a valid email address ",
+                variant: "danger",
+                textColor: "text-white",
+            });
+            return;
+        }
+        if (formData.password.length < 6) {
+            setToast({
+                show: true,
+                message: "Password must be at least 6 characters long ",
+                variant: "warning",
+                textColor: "text-dark",
+            });
+            return;
+        }
         if (formData.password !== formData.confirmPassword) {
             setToast({
                 show: true,
@@ -27,6 +46,7 @@ const SignUpPage = () => {
         }
 
         setLoading(true);
+        //Network call - Authentication
         try {
             const res = await fetch(
                 `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
@@ -54,7 +74,7 @@ const SignUpPage = () => {
                 textColor: "text-white",
             });
 
-            // setTimeout(() => navigate("/login"), 1000);
+            setTimeout(() => navigate("/login"), 1000);
         } catch (error) {
             setToast({
                 show: true,
@@ -84,7 +104,7 @@ const SignUpPage = () => {
             <Container
                 fluid
                 className="d-flex flex-column justify-content-center align-items-center vh-100 w-100 m-0"
-                style={{ backgroundColor: "#f9fbff" }}
+                style={{ backgroundColor: "#eaeaeaff" }}
             >
                 <Card className="shadow-sm p-4 border-0" style={{ width: "360px" }}>
                     <h4 className="text-center mb-4 fw-bold text-primary">Create Account</h4>
@@ -133,9 +153,9 @@ const SignUpPage = () => {
 
                     <p className="mt-3 text-center mb-0">
                         Already have an account?{" "}
-                        {/* <NavLink to="/login" className="text-decoration-none fw-semibold text-primary">
+                        <NavLink to="/login" className="text-decoration-none fw-semibold text-primary">
                             Login
-                        </NavLink> */}
+                        </NavLink>
                     </p>
                 </Card>
             </Container>
