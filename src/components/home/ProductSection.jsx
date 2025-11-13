@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
 import ProductCard from "./ProductCard";
+import { useNavigate } from "react-router-dom";
 
 const ProductSection = ({title, category, BASE_URL}) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchCategoryProducts = async () => {
             setLoading(true);
@@ -30,7 +32,10 @@ const ProductSection = ({title, category, BASE_URL}) => {
         <Container className="my-5">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3 className="fw-bold">{title}</h3>
-                <Button variant="link" href={`/category/${category}`} className="text-decoration-none">
+                <Button 
+                    variant="link" 
+                    onClick={() => navigate(`/category/${category.key}`)} 
+                    className="text-decoration-none">
                     View All →
                 </Button>
             </div>
