@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Spinner, Button, Card, Container } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../reduxStore/cartSlice";
 
 const ProductDetailsPage=()=>{
     const { id } = useParams();
@@ -9,6 +11,8 @@ const ProductDetailsPage=()=>{
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const dispatch = useDispatch();
     
     useEffect(() => {
         const fetchProduct = async () => {
@@ -24,6 +28,15 @@ const ProductDetailsPage=()=>{
         };
         fetchProduct();
     }, [id]);
+
+    const handleAdd = () => {
+        dispatch(addToCart({
+            id,
+            name: product.name,
+            price: product.price,
+            imageUrl: product.imageUrl,
+        }));
+    };
 
     if (loading)
     return (
@@ -70,10 +83,7 @@ const ProductDetailsPage=()=>{
                     className="mt-3"
                     variant={isOutOfStock ? "secondary" : "primary"}
                     disabled={isOutOfStock}
-                    onClick={() => {
-                        // Cart logic will be added next
-                        console.log("Add to cart:", product);
-                    }}
+                    onClick={handleAdd}
                 >
                     {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                 </Button>
