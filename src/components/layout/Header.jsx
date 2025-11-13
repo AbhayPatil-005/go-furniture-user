@@ -3,9 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const navigate = useNavigate();
-  const { isLoggedIn } = useSelector((state) => state.auth);
-  const cartCount = 2; // later connect to redux/cart slice
+    const navigate = useNavigate();
+    const { isLoggedIn } = useSelector((state) => state.auth);
+    const cartCount = useSelector((state) => state.cart.items.length);
+
 
   return (
     <header className="py-3 shadow-sm bg-white">
@@ -54,8 +55,8 @@ const Header = () => {
                 onClick={() => navigate("/cart")}
             >
                 🛒
-                {cartCount > 0 && (
-                    <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">
+                {cartCount >= 0 && (
+                    <Badge bg="danger" pill className=" position-absolute top-1 start-100 translate-middle">
                         {cartCount}
                     </Badge>
                 )}
