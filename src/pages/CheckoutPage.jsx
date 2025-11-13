@@ -68,7 +68,7 @@ const CheckoutPage =()=>{
         });
 
         dispatch(clearCart());
-        navigate("/thankyou");
+        navigate("/thank-you");
     }
     return (<>
         <div className="container py-4">
