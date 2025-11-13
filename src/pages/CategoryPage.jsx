@@ -69,7 +69,7 @@ const CategoryPage =()=>{
                                 <Button
                                     variant="success"
                                     className="w-100"
-                                    onClick={() => navigate(`/product/${product.id}}
+                                    onClick={() => navigate(`/product/${product.id}`)}
                                 >
                                     Add to Cart
                                 </Button>
