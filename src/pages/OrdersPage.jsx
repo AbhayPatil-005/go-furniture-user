@@ -27,7 +27,7 @@ const OrdersPage = () => {
           setOrders(formatted.reverse());
         }
       } catch (err) {
-        console.log("Failed to load orders:", err);
+        console.log("Failed to load orders:" + err.message);
       } finally {
         setLoading(false);
       }
@@ -66,7 +66,7 @@ const OrdersPage = () => {
             <ul>
               {order.items.map((item) => (
                 <li key={item.id}>
-                  {item.name} × {item.quantity}
+                  {item.name} x {item.quantity}
                 </li>
               ))}
             </ul>

@@ -9,6 +9,8 @@ import CategoryPage from './pages/CategoryPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import CartPage from './pages/CartPage';
 import MainLayout from './components/layout/MainLayout';
+import OrdersPage from './pages/OrdersPage';
+import ThankYouPage from './pages/ThankYouPage';
 
 function App() {
   const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn);
