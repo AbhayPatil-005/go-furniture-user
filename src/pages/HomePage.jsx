@@ -7,9 +7,11 @@ const HomePage = () => {
         <main className="mt-2">
             <HeroSlider />
 
-            <ProductSection title="1 Door Wardrobes" category="1-door-wardrobe" BASE_URL={BASE_URL} />
-            <ProductSection title="2 Door Wardrobes" category="2-door-wardrobe" BASE_URL={BASE_URL} />
-            <ProductSection title="Sliding Wardrobes" category="sliding-wardrobe" BASE_URL={BASE_URL} />
+            <ProductSection title="Chairs" category="chairs" BASE_URL={BASE_URL} />
+            <ProductSection title="Sofas" category="sofas" BASE_URL={BASE_URL} />
+            <ProductSection title="Beds" category="beds" BASE_URL={BASE_URL} />
+            <ProductSection title="Wardrobes" category="wardrobes" BASE_URL={BASE_URL} />
+            <ProductSection title="Benches/Tables" category="benches-tables" BASE_URL={BASE_URL} />
         </main>
     </>)
 }
