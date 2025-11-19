@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, Button, Spinner, Toast, ToastContainer } from "react-bootstrap";
-import AddressForm from "../components/address/AddressForm";
-import AddressSelector from "../components/address/AddressSelector";
+import AddressForm from "../components/home/AddressForm";
+import AddressSelector from "../components/home/AddressSelector";
 import { clearCart } from "../reduxStore/cartSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,7 @@ const CheckoutPage =()=>{
 
     const BASE_URL = import.meta.env.VITE_USER_FIREBASE_BASE_URL;
     const userEmail = useSelector((state) => state.auth.userEmail);
+    const safeEmail = userEmail.replace(/\./g, ",");
     const cart = useSelector((state) => state.cart.items);
 
     const [addresses, setAddresses] = useState([]);
@@ -27,17 +28,34 @@ const CheckoutPage =()=>{
     });
 
     const totalAmount = cart.reduce((sum, item) =>
-        sum + item.price * item.qty, 0
+        sum + Number(item.price) * Number(item.cartQuantity), 0
     );
 
     useEffect(() => {
         if (!userEmail) return; // guest user
 
-        const safeEmail = userEmail.replace(/\./g, ",");
         fetch(`${BASE_URL}/users/${safeEmail}/addresses.json`)
             .then((res) => res.json())
             .then((data) => {if (data) setAddresses(Object.values(data));});
-    }, []);
+    }, [userEmail, safeEmail, BASE_URL]);
+
+    const saveAddress = async (addr) => {
+        await fetch(`${BASE_URL}/users/${safeEmail}/addresses.json`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(addr),
+        });
+
+        setAddresses(prev => [...prev, addr]);
+        setSelectedAddress(addr);
+
+        setToast({
+            show: true,
+            message: "Address added successfully!",
+            variant: "success",
+            textColor: "text-white"
+        });
+    };
 
     const placeOrder = async () => {
         if (!selectedAddress) {
@@ -61,11 +79,17 @@ const CheckoutPage =()=>{
             status: "placed",
             date: new Date().toISOString(),
         };
-        await fetch(`${BASE_URL}/orders.json`, {
+        await fetch(`${BASE_URL}/orders/${safeEmail}/newOrders.json`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(orderData),
         });
+        setToast({
+                show: true,
+                variant: "success",
+                message: "Your order has been placed successfully",
+                textColor: "text-white",
+            });
 
         dispatch(clearCart());
         navigate("/thank-you");
@@ -80,7 +104,7 @@ const CheckoutPage =()=>{
                     autohide
                     delay={2500}
                 >
-                    <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
+                    <Toast.Body className={`${toast.textColor} text-center`} >{toast.message}</Toast.Body>
                 </Toast>
             </ToastContainer>
 
@@ -90,10 +114,12 @@ const CheckoutPage =()=>{
                 <div className="col-md-6">
                     <Card className="p-3">
 
-                        {userEmail ? (<AddressSelector
-                            addresses={addresses}
-                            onSelect={(addr) => setSelectedAddress(addr)}
-                        />) : (<AddressForm onSubmit={(addr) => setSelectedAddress(addr)} />)}
+                        {userEmail ? (
+                            <AddressSelector 
+                                addresses={addresses} 
+                                onSelect={(addr) => setSelectedAddress(addr)}
+                                onAddNew={saveAddress}
+                            />) : (<AddressForm onSubmit={saveAddress} />)}
 
                     </Card>
                 </div>
@@ -104,7 +130,7 @@ const CheckoutPage =()=>{
 
                         {cart.map((item) => (
                             <p key={item.id}>
-                                {item.name} x {item.qty} = ₹{item.price * item.qty}
+                                {item.name} x {item.cartQuantity} = ₹{Number(item.price) * Number(item.cartQuantity)}
                             </p>
                         ))}
 
