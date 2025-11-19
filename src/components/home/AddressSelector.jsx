@@ -2,10 +2,17 @@ import { useState } from "react";
 import {Button, ListGroup} from "react-bootstrap";
 import AddressForm from "./AddressForm";
 
-const AddressSelector=({addresses, onSelect})=>{
+const AddressSelector=({addresses, onSelect, onAddNew})=>{
     const [addingNew, setAddingNew] = useState(false);
     if(addingNew)
-        return(<AddressForm onSubmit={(addr) => onSelect(addr)} />);
+        return(
+            <AddressForm 
+                onSubmit={(addr) => {
+                    onAddNew(addr);
+                    setAddingNew(false);
+                    } 
+                }
+            />);
     return(
         <>
             <h5>Select Delivery Address</h5>
