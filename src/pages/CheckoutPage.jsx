@@ -71,29 +71,85 @@ const CheckoutPage =()=>{
         }
         setLoading(true);
 
-        const orderData = {
-            userEmail: userEmail || "guest",
-            items: cart,
-            totalAmount,
-            address: selectedAddress,
-            status: "placed",
-            date: new Date().toISOString(),
-        };
-        await fetch(`${BASE_URL}/orders/${safeEmail}/newOrders.json`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(orderData),
-        });
-        setToast({
+        try{
+            const currentProducts = await Promise.all(
+                cart.map((item) =>
+                    fetch(`${BASE_URL}/products/${item.id}.json`)
+                        .then((r) => r.json()))
+            );
+            for (let i = 0; i < cart.length; i++) {
+                const cartItem = cart[i];
+                const product = currentProducts[i];
+
+                const available = Number(product?.quantity ?? 0);
+                const want = Number(cartItem.cartQuantity ?? cartItem.quantity ?? 1);
+
+                if (want > available) {
+                    setToast({
+                        show: true,
+                        variant: "danger",
+                        message: `Only ${available} left for "${cartItem.name}". Reduce quantity or remove it.`,
+                        textColor: "text-white",
+                    });
+                    setLoading(false);
+                    return; 
+                }
+            }
+
+            for (let i = 0; i < cart.length; i++) {
+                const cartItem = cart[i];
+                const product =currentProducts[i];
+
+                const available = Number(product?.quantity ?? 0);
+                const want = Number(cartItem.cartQuantity ?? cartItem.quantity ?? 1);
+                const newQty = Math.max(0, available - want);
+
+                await fetch(`${BASE_URL}/products/${cartItem.id}.json`, {
+                    method: "PATCH",
+                    headers: { "Content-type": "application/json" },
+                    body: JSON.stringify({ quantity: newQty }),
+                });
+            }
+
+            const orderData = {
+                userEmail: userEmail || "guest",
+                items: cart,
+                totalAmount,
+                address: selectedAddress,
+                status: "placed",
+                date: new Date().toISOString(),
+            };
+
+            await fetch(`${BASE_URL}/orders/${safeEmail}/newOrders.json`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderData),
+            });
+
+            setToast({
                 show: true,
                 variant: "success",
                 message: "Your order has been placed successfully",
                 textColor: "text-white",
             });
 
-        dispatch(clearCart());
-        navigate("/thank-you");
-    }
+            dispatch(clearCart());
+            navigate("/thank-you");
+
+            setTimeout(() => navigate("/thank-you"), 600);
+
+        } catch (err) {
+            console.error("placeOrder error:", err);
+            setToast({
+                show: true,
+                variant: "danger",
+                message: "Failed to place order — try again.",
+                textColor: "text-white",
+            });
+            setLoading(false);
+            }
+        }   
+    
     return (<>
         <div className="container py-4">
             <ToastContainer position="top-center" className="mt-3">
