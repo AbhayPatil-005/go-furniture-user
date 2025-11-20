@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 
-const AddressForm = ({ onSubmit }) => {
-  const [address, setAddress] = useState({
+const AddressForm = ({ onSubmit, initialData }) => {
+  const [address, setAddress] = useState(initialData || {
     name: "",
     phone: "",
     street: "",
     city: "",
     pincode: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setAddress(initialData);
+    }
+  }, [initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
