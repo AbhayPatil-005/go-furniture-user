@@ -3,6 +3,8 @@ import { Form, Button, Container, Card, Spinner, Toast, ToastContainer } from "r
 import { useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 import { login } from "../../reduxStore/authSlice";
+import Header from "../../components/layout/Header";
+import Footer from "../../components/layout/Footer";
 
 const SignUpPage = () => {
     const [formData, setFormData] = useState({ email: "", password: "", confirmPassword: "" });
@@ -100,11 +102,11 @@ const SignUpPage = () => {
                     <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
                 </Toast>
             </ToastContainer>
-
+            <Header />
             <Container
                 fluid
-                className="d-flex flex-column justify-content-center align-items-center vh-100 w-100 m-0"
-                style={{ backgroundColor: "#eaeaeaff" }}
+                className="d-flex flex-column justify-content-center align-items-center vh-auto py-5 w-100 m-0"
+                style={{ backgroundColor: "#f6fcffff" }}
             >
                 <Card className="shadow-sm p-4 border-0" style={{ width: "360px" }}>
                     <h4 className="text-center mb-4 fw-bold text-primary">Create Account</h4>
@@ -159,6 +161,7 @@ const SignUpPage = () => {
                     </p>
                 </Card>
             </Container>
+            <Footer />
         </>
     );
 };
