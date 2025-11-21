@@ -3,6 +3,9 @@ import { Form, Button, Container, Card, Spinner, Toast, ToastContainer } from "r
 import { useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 import { login } from "../../reduxStore/authSlice";
+import Header from "../../components/layout/Header";
+import Footer from "../../components/layout/Footer";
+import Navbar from "../../components/layout/Navbar";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -43,7 +46,7 @@ const LoginPage = () => {
         textColor: "text-white",
       });
 
-      setTimeout(() => navigate("/home"), 1000);
+      setTimeout(() => navigate("/"), 1000);
     } catch (error) {
       setToast({
         show: true,
@@ -69,10 +72,11 @@ const LoginPage = () => {
           <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
         </Toast>
       </ToastContainer>
-
+      <Header />
+      <Navbar />
       <Container
         fluid
-        className="d-flex flex-column justify-content-center align-items-center vh-100 w-100 m-0"
+        className="d-flex flex-column justify-content-start align-items-center vh-auto w-100 m-0 py-5"
         style={{ backgroundColor: "#f9fbff" }}
       >
         <Card className="shadow-sm p-4 border-0" style={{ width: "360px" }}>
@@ -116,6 +120,7 @@ const LoginPage = () => {
           </p>
         </Card>
       </Container>
+      <Footer />
     </>
   );
 };
