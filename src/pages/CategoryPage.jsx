@@ -65,14 +65,21 @@ const CategoryPage =()=>{
                 {products.map((product) => (
                     <Col key={product.id} md={3} sm={6} className="mb-4">
                         <Card className="shadow-sm">
-                            <Card.Img
-                                src={product.imageUrl}
-                                style={{height:"100px",width:"100%", objectFit:"cover" }}
-                            />
-
+                            <div style={{
+                                width: "100%",
+                                aspectRatio: "4 / 3",
+                                overflow: "hidden",
+                            }}>
+                                <Card.Img
+                                    src={product.imageUrl}
+                                    style={{ height: "100%", width: "100%", objectFit: "cover" }}
+                                />
+                            </div>
                             <Card.Body>
+                                <div style={{ minHeight: "70px" }}>
                                 <Card.Title>{product.name}</Card.Title>
-                                <Card.Text>₹{product.price}</Card.Text>
+                                </div>
+                                <Card.Text>₹ {product.price}/-</Card.Text>
 
                                 <Button
                                     variant="outline-primary"

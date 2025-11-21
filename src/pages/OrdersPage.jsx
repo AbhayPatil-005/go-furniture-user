@@ -3,19 +3,17 @@ import { useSelector } from "react-redux";
 import { Card, Spinner } from "react-bootstrap";
 
 const OrdersPage = () => {
-  const BASE_URL = import.meta.env.VITE_FIREBASE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_USER_FIREBASE_BASE_URL;
 
   const userEmail = useSelector((state) => state.auth.userEmail);
-  const guestId = localStorage.getItem("guestId");
-  const userId = userEmail || guestId;
-
+  const safeEmail = userEmail?.replace(/\./g, ",");
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/orders/${userId}.json`);
+        const res = await fetch(`${BASE_URL}/orders/${safeEmail}/newOrders.json`);
         const data = await res.json();
 
         if (data) {
@@ -34,8 +32,9 @@ const OrdersPage = () => {
     };
 
     fetchOrders();
-  }, [userId]);
-
+  }, [userEmail]);
+  console.log("orders fetched")
+  
   if (loading)
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
@@ -46,7 +45,7 @@ const OrdersPage = () => {
   if (orders.length === 0)
     return (
       <h4 className="text-center mt-5 text-muted">
-        You have no orders yet 📭
+        You have no orders yet 
       </h4>
     );
 
@@ -66,22 +65,24 @@ const OrdersPage = () => {
             <ul>
               {order.items.map((item) => (
                 <li key={item.id}>
-                  {item.name} x {item.quantity}
+                  {item.name} x {item.stock}
                 </li>
               ))}
             </ul>
           </div>
 
-          <p className="fw-bold">Total: ₹{order.total}</p>
+          <p className="fw-bold">Total: ₹ {order.totalAmount}/-</p>
 
           <p>
             <strong>Status: </strong>
             <span
               className={
-                order.status === "delivered"
+                order.status === "Delivered"
                   ? "text-success"
-                  : order.status === "cancelled"
+                  : order.status === "Cancelled"
                   ? "text-danger"
+                  : order.status === "Shipped"
+                  ? "text-warning"
                   : "text-primary"
               }
             >
@@ -90,7 +91,7 @@ const OrdersPage = () => {
           </p>
 
           <p className="text-muted">
-            <strong>Address:</strong> {order.address.fullName},{" "}
+            <strong>Address:</strong> {order.address.name},{" "}
             {order.address.street}, {order.address.city},{" "}
             {order.address.pincode}
           </p>

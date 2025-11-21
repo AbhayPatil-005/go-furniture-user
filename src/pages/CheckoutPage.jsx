@@ -5,6 +5,7 @@ import AddressForm from "../components/home/AddressForm";
 import AddressSelector from "../components/home/AddressSelector";
 import { clearCart } from "../reduxStore/cartSlice";
 import { useNavigate } from "react-router-dom";
+import PleaseLogin from "../components/home/PleaseLogin";
 
 const CheckoutPage =()=>{
     const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const CheckoutPage =()=>{
 
     const BASE_URL = import.meta.env.VITE_USER_FIREBASE_BASE_URL;
     const userEmail = useSelector((state) => state.auth.userEmail);
-    const safeEmail = userEmail.replace(/\./g, ",");
+    const safeEmail = userEmail?.replace(/\./g, ",");
     const cart = useSelector((state) => state.cart.items);
 
     const [addresses, setAddresses] = useState([]);
@@ -26,6 +27,12 @@ const CheckoutPage =()=>{
         variant: "",
         textColor: "",
     });
+
+    if (!userEmail) {
+        return (
+            <PleaseLogin />
+        );
+    }
 
     const totalAmount = cart.reduce((sum, item) =>
         sum + Number(item.price) * Number(item.cartQuantity), 0
@@ -152,7 +159,7 @@ const CheckoutPage =()=>{
     
     return (<>
         <div className="container py-4">
-            <ToastContainer position="top-center" className="mt-3">
+            <ToastContainer position="top-center" className="toast-float">
                 <Toast
                     bg={toast.variant}
                     show={toast.show}
@@ -191,10 +198,11 @@ const CheckoutPage =()=>{
                         ))}
 
                         <h4>Total: ₹{totalAmount}</h4>
+                        <p className="text-muted">Payment mode only cash on Delivery</p>
 
                         <Button
                             onClick={placeOrder}
-                            className="w-100 mt-3"
+                            className="mt-2 w-auto d-block ms-auto px-4 mt-3"
                             disabled={loading}
                         >
                             {loading ? <Spinner size="sm" /> : "Place Order (COD)"}
