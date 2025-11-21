@@ -1,12 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Card, Button, Spinner, Container, Row, Col } from "react-bootstrap";
-
+import { Card, Button, Spinner, Container, Row, Col, Toast, ToastContainer } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../reduxStore/cartSlice";
 
 const CategoryPage =()=>{
     const { categoryName } = useParams();
     const BASE_URL = import.meta.env.VITE_USER_FIREBASE_BASE_URL;
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+    const [toast, setToast] = useState({ show: false, message: "", variant: "", textColor: "" });
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
     useEffect(() => {
@@ -41,9 +46,20 @@ const CategoryPage =()=>{
             </div>
         );
 
-    return(<>
+    return (<>
+        <ToastContainer position="top-center" className="toast-float">
+            <Toast
+                bg={toast.variant}
+                show={toast.show}
+                onClose={() => setToast({ ...toast, show: false })}
+                delay={3000}
+                autohide
+            >
+                <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
+            </Toast>
+        </ToastContainer>
         <Container className="mt-4">
-            <h3 className="mb-4 text-capitalize">{categoryName.replace(/-/g, " ")}</h3>
+            <h3 className="mb-4 text-capitalize border-bottom pb-2">{categoryName.replace(/-/g, " ")}</h3>
 
             <Row>
                 {products.map((product) => (
@@ -51,7 +67,7 @@ const CategoryPage =()=>{
                         <Card className="shadow-sm">
                             <Card.Img
                                 src={product.imageUrl}
-                                style={{ height: "200px", objectFit: "cover" }}
+                                style={{height:"100px",width:"100%", objectFit:"cover" }}
                             />
 
                             <Card.Body>
@@ -59,8 +75,8 @@ const CategoryPage =()=>{
                                 <Card.Text>₹{product.price}</Card.Text>
 
                                 <Button
-                                    variant="primary"
-                                    onClick={() => console.log("Go to details")}
+                                    variant="outline-primary"
+                                    onClick={() => navigate(`/product/${product.id}`)}
                                     className="w-100 mb-2"
                                 >
                                     View Details
@@ -69,7 +85,19 @@ const CategoryPage =()=>{
                                 <Button
                                     variant="success"
                                     className="w-100"
-                                    onClick={() => navigate(`/product/${product.id}`)}
+                                    onClick={() => dispatch(addToCart({
+                                            id: product.id,
+                                            name: product.name,
+                                            price: product.price,
+                                            imageUrl: product.imageUrl,
+                                        },
+                                        setToast({
+                                            show:"true",
+                                            message:`Added ${product.name} to cart`,
+                                            variant:"success",
+                                            textColor:"text-white text-center fw-bolder"
+                                        })))
+                                    }
                                 >
                                     Add to Cart
                                 </Button>
