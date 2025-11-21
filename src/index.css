@@ -11,3 +11,23 @@ html, body {
 .main-content {
   flex: 1;
 }
+
+.toast-float {
+  position: fixed !important;
+  margin-top: 1rem;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  pointer-events: none; 
+}
+
+.toast-float .toast {
+  pointer-events: auto;   
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  border-radius: 8px;
+}
+
+.toast-float .toast {
+  transition: all 0.3s ease-out;
+}
