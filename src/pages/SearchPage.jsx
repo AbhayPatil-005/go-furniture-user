@@ -41,7 +41,7 @@ const SearchResultsPage = () => {
 
     return (
         <Container className="my-4">
-            <h3 className="fw-bold mb-4">
+            <h3 className="mb-4">
                 Search results for: "<span className="text-primary">{query}</span>"
             </h3>
 

@@ -26,7 +26,7 @@ const HeroSlider=()=>{
         },
     ];
     return (
-        <div className="hero-slider">
+        <div className="hero-slider rounded-0">
             <Swiper
                 modules={[Autoplay, Pagination]}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -35,15 +35,13 @@ const HeroSlider=()=>{
             >
                 {slides.map((slide) => (
                     <SwiperSlide key={slide.id}>
-                        <div className="slide-container">
+                        <div className="swiper-slide">
                             <img
-                                style={{height:"450px", width:"100%", objectFit: "cover" }}
                                 src={slide.image}
                                 alt={slide.caption}
-                                className="hero-img"
                                 loading="lazy"
                             />
-                            <div className="caption p-3">
+                            <div className="hero-caption">
                                 <h2>{slide.caption}</h2>
                             </div>
                         </div>

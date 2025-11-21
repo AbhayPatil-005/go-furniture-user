@@ -4,7 +4,7 @@ import ProductSection from "../components/home/ProductSection";
 const HomePage = () => {
     const BASE_URL = import.meta.env.VITE_USER_FIREBASE_BASE_URL;
     return (<>
-        <main className="mt-2">
+        <main>
             <HeroSlider />
 
             <ProductSection title="Chairs" category="chairs" BASE_URL={BASE_URL} />
