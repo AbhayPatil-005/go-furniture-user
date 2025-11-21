@@ -61,7 +61,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" className="mt-3 text-center">
+      <ToastContainer position="top-center" className="toast-float">
         <Toast
           bg={toast.variant}
           show={toast.show}
