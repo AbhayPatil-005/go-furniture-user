@@ -1,4 +1,4 @@
-import { Container, Row, Col, Form, Button, Badge } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Badge, Navbar } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
@@ -22,9 +22,11 @@ const Header = () => {
         <Row className="align-items-center g-3">
           
           <Col xs="12" md="3" className="text-center text-md-start">
-            <Link to="/" className="text-decoration-none text-dark fs-3 fw-bold">
-              Go-Furniture
-            </Link>
+            <Navbar.Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+              <span className="brand-logo">
+                Go<span className="dot">-</span>Furniture
+              </span>
+            </Navbar.Brand>
           </Col>
 
           <Col xs="12" md="6">
