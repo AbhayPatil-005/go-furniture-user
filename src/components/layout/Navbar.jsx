@@ -1,4 +1,4 @@
-import { Container, Nav } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -6,12 +6,11 @@ const Navbar=()=>{
     const { isLoggedIn } = useSelector((state) => state.auth);
 
     const categories = [
-    { label: "Living Room", path: "/category/living-room" },
-    { label: "Bedroom", path: "/category/bedroom" },
-    { label: "Dining", path: "/category/dining" },
-    { label: "Kids Furniture", path: "/category/kids" },
-    { label: "Plastic Chairs", path: "/category/chairs" },
-    { label: "Premium Furniture", path: "/category/premium" },
+    { label: "Chairs", path: "/category/chairs" },
+    { label: "Sofas", path: "/category/sofas" },
+    { label: "Beds", path: "/category/beds" },
+    { label: "Wardrobes", path: "/category/wardrobes" },
+    { label: "Benches/Tables", path: "/category/benches-tables" },
     ];
 
     return (<>
@@ -29,8 +28,6 @@ const Navbar=()=>{
                         {c.label}
                     </NavLink>
                 ))}
-
-                {isLoggedIn && (
                     <NavLink
                         to="/orders"
                         className={({ isActive }) =>
@@ -41,7 +38,6 @@ const Navbar=()=>{
                     >
                         My Orders
                     </NavLink>
-                )}
             </Container>
         </nav>
     </>)

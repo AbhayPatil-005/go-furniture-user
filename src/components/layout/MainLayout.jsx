@@ -9,7 +9,7 @@ const MainLayout = () =>{
         <div className="d-flex flex-column min-vh-100">
             <Header />
             <Navbar />
-            <div className="mt-4 flex-grow-1">
+            <div className="mt-auto flex-grow-1">
                 <Outlet />
             </div>
             <Footer />
