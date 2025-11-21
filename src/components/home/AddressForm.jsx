@@ -39,6 +39,8 @@ const AddressForm = ({ onSubmit, initialData }) => {
           type="tel"
           required
           value={address.phone}
+          minLength={10}
+          maxLength={10}
           onChange={(e) => setAddress({ ...address, phone: e.target.value })}
         />
       </Form.Group>
@@ -66,14 +68,15 @@ const AddressForm = ({ onSubmit, initialData }) => {
       <Form.Group className="mb-3">
         <Form.Label>Pincode</Form.Label>
         <Form.Control
-          type="number"
+          type="text"
           required
+          minLength={6}
           value={address.pincode}
           onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
         />
       </Form.Group>
 
-      <Button type="submit" variant="primary" className="w-100">
+      <Button type="submit" variant="success" className="mt-2 w-auto d-block mx-auto px-4">
         Save Address
       </Button>
     </Form>
