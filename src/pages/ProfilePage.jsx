@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button, Card, Toast, ToastContainer } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../reduxStore/authSlice";
+import { clearCart } from "../reduxStore/cartSlice";
 import Navbar from "../components/layout/Navbar";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
@@ -14,7 +15,7 @@ const ProfilePage=()=>{
 
     const BASE_URL = import.meta.env.VITE_USER_FIREBASE_BASE_URL;
     const userEmail = useSelector((state) => state.auth.userEmail);
-    const safeEmail = userEmail.replace(/\./g, ",");
+    const safeEmail = userEmail?.replace(/\./g, ",");
 
     const [addresses, setAddresses] = useState([]);
     const [editingAddress, setEditingAddress] = useState(null);
@@ -110,6 +111,7 @@ const ProfilePage=()=>{
 
     const handleLogout =()=>{
         dispatch(logout());
+        dispatch(clearCart());
         navigate("/login");
     };
 
@@ -119,7 +121,7 @@ const ProfilePage=()=>{
             <Navbar />
             <div className="main-content">
                 <div className="container py-4 w-50">
-                    <ToastContainer position="top-center" className="mt-3">
+                    <ToastContainer position="top-center" className="toast-float">
                         <Toast
                             bg={toast.variant}
                             show={toast.show}
