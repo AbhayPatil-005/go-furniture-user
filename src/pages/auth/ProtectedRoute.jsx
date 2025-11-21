@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import PleaseLogin from "../../components/home/PleaseLogin";
 
 const ProtectedRoute = ({ children }) => {
   const userEmail = useSelector((state) => state.auth.userEmail);
 
-  if (!userEmail) return <Navigate to="/login" />;
+  if (!userEmail) return <PleaseLogin />;
 
   return children;
 };
