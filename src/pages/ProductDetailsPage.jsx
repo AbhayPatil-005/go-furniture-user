@@ -70,7 +70,7 @@ const ProductDetailsPage=()=>{
     const isOutOfStock = product.quantity <= 0;
 
     return (<>
-        <ToastContainer position="top-center" className="mt-3">
+        <ToastContainer position="top-center" className="toast-float">
             <Toast
                 bg={toast.variant}
                 show={toast.show}
@@ -78,11 +78,11 @@ const ProductDetailsPage=()=>{
                 autohide
                 delay={2000}
             >
-                <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
+                <Toast.Body className={`${toast.textColor} text-center`}>{toast.message}</Toast.Body>
             </Toast>
         </ToastContainer>
         <Container fluid className="py-4 bg-light mt-0">
-            <Button variant="outline-secondary" className="mb-3" onClick={() => navigate(-1)}>
+            <Button variant="outline-secondary" className="mx-5 mb-3" onClick={() => navigate(-1)}>
                 ← Back
             </Button>
 
@@ -91,33 +91,30 @@ const ProductDetailsPage=()=>{
                 shadow-sm 
                 border-0 
                 d-flex 
-                flex-row 
+                flex-row gap-2
                 justify-content-evenly
                 ">
                 
-                <div className="text-center ">
+                <div className="text-center">
                     <img
                         className="img-fluid "
                         src={product.imageUrl}
                         alt={product.name}
-                        style={{ width: "460px", borderRadius: "8px" }}
+                        style={{ width:"auto",  borderRadius: "8px" }}
                     />
                 </div>
                 <div className="border rounded p-3 d-flex flex-column justify-content-between">
                     <div >
-                        <h3 className="fw-bold">{product.name}</h3>
-                        {isOutOfStock ?
-                            (<p className="text-danger fw-semibold"> ! Out of Stock</p>
-                            ) : (
-                                <p className="text-primary fw-semibold">
-                                    Available: {product.quantity}
-                                </p>)
+                        <h3 className="fw-bold" >{product.name}</h3>
+                        {isOutOfStock 
+                            ? (<p className="text-danger fw-semibold"> ! Out of Stock</p>) 
+                            : (<p className="text-primary fw-semibold"> Available: {product.quantity}</p>)
                         }
                         <p className="mt-3 overflow-x-auto" style={{ maxHeight: '300px', overflowY: 'auto' }}>
                             {product.description}
                         </p>
                     </div>
-                    <div className="d-flex">
+                    <div className="d-flex ">
                         <h4 className="text-success">₹{product.price}</h4>
                         <Button
                             className="ms-auto mt-auto"
