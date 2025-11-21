@@ -9,19 +9,19 @@ const HeroSlider=()=>{
         {
             id: 1,
             image:
-                "https://www.nilkamalfurniture.com/cdn/shop/files/Furniture_Festival_Main_Banner_Desktop.webp?v=1728299914",
+                "https://cdn.pixabay.com/photo/2017/09/09/18/25/living-room-2732939_1280.jpg",
             caption: "Transform Your Home with Modern Furniture",
         },
         {
             id: 2,
             image:
-                "https://www.nilkamalfurniture.com/cdn/shop/files/Mattress_Banner_Desktop.webp?v=1728299921",
+                "https://cdn.pixabay.com/photo/2015/03/12/14/23/bedroom-670249_1280.jpg",
             caption: "Sleep Like Royalty — Explore Premium Mattresses",
         },
         {
             id: 3,
             image:
-                "https://www.nilkamalfurniture.com/cdn/shop/files/Workstation_Banner_Desktop.webp?v=1728299927",
+                "https://cdn.pixabay.com/photo/2015/04/20/06/46/office-730681_1280.jpg",
             caption: "Work Smart, Sit Comfortably — Explore Office Chairs",
         },
     ];
@@ -37,12 +37,13 @@ const HeroSlider=()=>{
                     <SwiperSlide key={slide.id}>
                         <div className="slide-container">
                             <img
+                                style={{height:"450px", width:"100%", objectFit: "cover" }}
                                 src={slide.image}
                                 alt={slide.caption}
                                 className="hero-img"
                                 loading="lazy"
                             />
-                            <div className="caption">
+                            <div className="caption p-3">
                                 <h2>{slide.caption}</h2>
                             </div>
                         </div>

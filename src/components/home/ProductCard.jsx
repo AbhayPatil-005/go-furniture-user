@@ -1,4 +1,4 @@
-import { Card, Button, Toast, ToastContainer } from "react-bootstrap";
+import { Card, Button, Toast, ToastContainer, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../../reduxStore/cartSlice";
 import { useState } from "react";
@@ -8,6 +8,7 @@ const ProductCard=({product})=>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const cartItems = useSelector((state)=>state.cart.items);
+    const isOutOfStock = product.quantity <= 0; 
     const [toast, setToast] = useState({
         show:false, message:"", variant:"", textColor:""
     });
@@ -19,7 +20,7 @@ const ProductCard=({product})=>{
                 show:true, 
                 message:`Only ${product.quantity} available in stock`,
                 variant:'warning',
-                textColor:'text-dark',
+                textColor:'text-dark text-center',
             })
             return;
         };
@@ -37,13 +38,13 @@ const ProductCard=({product})=>{
                 show:true, 
                 message:`Added ${product.name} to cart`,
                 variant:'success',
-                textColor:'text-white',
+                textColor:'text-white text-center ',
             })
         
     }
 
     return (<>
-        <ToastContainer position="top-center" className="mt-3">
+        <ToastContainer position="top-center" className="toast-float">
             <Toast
                 bg={toast.variant}
                 show={toast.show}
@@ -64,6 +65,11 @@ const ProductCard=({product})=>{
                 src={product.imageUrl}
                 style={{ height: "220px", objectFit: "cover" }}
             />
+            {isOutOfStock && (
+                <Badge bg="danger" className="position-absolute top-0 end-0 m-2">
+                    Out of Stock
+                </Badge>
+            )}
 
             <Card.Body>
                 <Card.Title className="fs-6">{product.name}</Card.Title>
@@ -71,14 +77,15 @@ const ProductCard=({product})=>{
                 <p className="fw-bold text-success mb-2">₹ {product.price}</p>
 
                 <Button
-                    variant="dark"
+                    variant={isOutOfStock?"secondary":"dark"}
                     className="w-100"
+                    disabled={isOutOfStock}
                     onClick={(e) => {
-                        e.stopPropagation(); // prevent card click
+                        e.stopPropagation();
                         handleAdd();
                     }}
                 >
-                    Add to Cart
+                    {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                 </Button>
             </Card.Body>
         </Card>
