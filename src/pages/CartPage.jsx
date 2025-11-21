@@ -10,7 +10,6 @@ const CartPage=()=>{
 
     const total = items.reduce((sum, item) => sum + item.price * item.cartQuantity, 0);
     return(
-        <>
             <div className="container py-4 w-50">
                 <h3 className="mb-4">Your Cart</h3>
 
@@ -71,7 +70,6 @@ const CartPage=()=>{
                     </>
                 )}
             </div>
-        </>
     )
 }
 

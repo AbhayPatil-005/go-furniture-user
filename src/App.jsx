@@ -15,6 +15,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import ProfilePage from './pages/ProfilePage';
 import { Navigate } from 'react-router-dom';
 import ProtectedRoute from './pages/auth/ProtectedRoute';
+import SearchResultsPage from './pages/SearchPage';
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="cart" element={<CartPage />} />
           <Route path="orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
           <Route path="checkout" element={<CheckoutPage/>}/>
+          <Route path="search" element={<SearchResultsPage />} />
         </Route>
 
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />

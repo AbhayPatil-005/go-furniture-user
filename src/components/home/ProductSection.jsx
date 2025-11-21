@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
+import { Container, Spinner, Button } from "react-bootstrap";
 import ProductCard from "./ProductCard";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,7 +10,6 @@ const ProductSection = ({title, category, BASE_URL}) => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    console.log(category)
     useEffect(() => {
         const fetchCategoryProducts = async () => {
             setLoading(true);

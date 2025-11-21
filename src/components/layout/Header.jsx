@@ -1,12 +1,20 @@
 import { Container, Row, Col, Form, Button, Badge } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 const Header = () => {
     const navigate = useNavigate();
     const { isLoggedIn } = useSelector((state) => state.auth);
     const cartCount = useSelector((state) => state.cart.items.length);
+    const [query, setQuery] = useState("");
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (!query.trim()) return;
+
+        navigate(`/search?query=${query}`);
+    };
 
   return (
     <header className="py-3 shadow-sm bg-white">
@@ -20,13 +28,15 @@ const Header = () => {
           </Col>
 
           <Col xs="12" md="6">
-            <Form className="d-flex">
+            <Form className="d-flex" onSubmit={handleSearch}>
               <Form.Control
                 type="search"
                 placeholder="Search for furniture, wardrobes, sofas..."
                 className="me-2"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
               />
-              <Button variant="dark">Search</Button>
+              <Button variant="dark" type="submit">Search</Button>
             </Form>
           </Col>
 
