@@ -1,9 +1,7 @@
 import { Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const Navbar=()=>{
-    const { isLoggedIn } = useSelector((state) => state.auth);
 
     const categories = [
     { label: "Chairs", path: "/category/chairs" },

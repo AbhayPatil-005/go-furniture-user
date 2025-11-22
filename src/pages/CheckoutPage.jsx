@@ -39,7 +39,7 @@ const CheckoutPage =()=>{
     );
 
     useEffect(() => {
-        if (!userEmail) return; // guest user
+        if (!userEmail) return; 
 
         fetch(`${BASE_URL}/users/${safeEmail}/addresses.json`)
             .then((res) => res.json())

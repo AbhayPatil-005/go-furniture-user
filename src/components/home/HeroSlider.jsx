@@ -41,7 +41,7 @@ const HeroSlider=()=>{
                                 alt={slide.caption}
                                 loading="lazy"
                             />
-                            <div className="hero-caption">
+                            <div className="hero-caption text-center">
                                 <h2>{slide.caption}</h2>
                             </div>
                         </div>

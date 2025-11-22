@@ -3,7 +3,6 @@ import './App.css'
 import LoginPage from './pages/auth/LoginPage';
 import SignUpPage from './pages/auth/SignUpPage';
 import { Route, Routes } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import HomePage from './pages/HomePage';
 import CategoryPage from './pages/CategoryPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';

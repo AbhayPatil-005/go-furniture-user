@@ -17,7 +17,7 @@ const SignUpPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Email and password validation
+ 
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(formData.email)) {
             setToast({
@@ -48,7 +48,7 @@ const SignUpPage = () => {
         }
 
         setLoading(true);
-        //Network call - Authentication
+
         try {
             const res = await fetch(
                 `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
@@ -66,7 +66,6 @@ const SignUpPage = () => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error.message || "Signup failed");
 
-            // Store token and email via Redux
             dispatch(login({ token: data.idToken, email: data.email }));
 
             setToast({

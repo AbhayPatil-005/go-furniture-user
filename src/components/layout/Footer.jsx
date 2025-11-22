@@ -9,7 +9,9 @@ const Footer=()=>{
                     <Row className="gy-3">
 
                         <Col md={4}>
-                            <h5 className="fw-bold">Go-Furniture</h5>
+                            <span className="brand-logo text-white">
+                                Go<span className="dot">-</span>Furniture
+                            </span>
                             <p className="text-secondary small">
                                 Your trusted destination for stylish & affordable furniture.
                             </p>
