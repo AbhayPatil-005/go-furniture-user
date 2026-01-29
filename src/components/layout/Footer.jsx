@@ -23,7 +23,7 @@ const Footer=()=>{
                                 <li><NavLink to="/" className="text-secondary text-decoration-none">
                                     Home
                                 </NavLink></li>
-                                <li><NavLink to="/category/all" className="text-secondary text-decoration-none">
+                                <li><NavLink to="/category" className="text-secondary text-decoration-none">
                                     Categories
                                 </NavLink></li>
                                 <li><NavLink to="/cart" className="text-secondary text-decoration-none">
