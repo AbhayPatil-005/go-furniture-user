@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Form, Button, Container, Card, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import { Form, Button, Container, Card, Spinner } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 import { login } from "../../reduxStore/authSlice";
@@ -10,8 +11,7 @@ import Navbar from "../../components/layout/Navbar";
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: "", variant: "", textColor: "" });
-
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const API_KEY = import.meta.env.VITE_USER_FIREBASE_AUTH_API_KEY;
@@ -39,21 +39,11 @@ const LoginPage = () => {
 
       dispatch(login({ token: data.idToken, email: data.email }));
 
-      setToast({
-        show: true,
-        message: "Login successful ",
-        variant: "success",
-        textColor: "text-white",
-      });
+      toast.success("Login successful")
 
       setTimeout(() => navigate("/"), 1000);
     } catch (error) {
-      setToast({
-        show: true,
-        message: error.message || "Login failed. Please try again.",
-        variant: "danger",
-        textColor: "text-white",
-      });
+      toast.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -61,17 +51,6 @@ const LoginPage = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" className="toast-float">
-        <Toast
-          bg={toast.variant}
-          show={toast.show}
-          onClose={() => setToast({ ...toast, show: false })}
-          delay={3000}
-          autohide
-        >
-          <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
-        </Toast>
-      </ToastContainer>
       <Header />
       <Navbar />
       <Container

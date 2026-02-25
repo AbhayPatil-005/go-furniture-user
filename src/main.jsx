@@ -9,7 +9,7 @@ import {Provider} from 'react-redux';
 import store from './reduxStore/store.js';
 
 import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify/unstyled';
+import { ToastContainer, Bounce } from 'react-toastify';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -17,14 +17,15 @@ createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <App />
         <ToastContainer
-          position="top-center"
+          position="top-right"
           autoClose={2500}
           hideProgressBar={false}
           newestOnTop
           closeOnClick
-          pauseOnHover
+          pauseOnHover={true}
           draggable
-          theme="colored"
+          theme="light"
+          transition={Bounce}
           />
       </BrowserRouter>
     </Provider>

@@ -10,7 +10,6 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-      console.log(item.stock)
       const existing = state.items.find((p) => p.id === item.id);
 
       if (existing) {
@@ -38,10 +37,7 @@ const cartSlice = createSlice({
       if (!item) return;
       if (item.cartQuantity < item.maxQuantity) {
         item.cartQuantity ++ ;
-      }else{
-        console.log("not working!")
       }
-
       localStorage.setItem("cart", JSON.stringify(state.items));
     },
 

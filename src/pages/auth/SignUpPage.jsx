@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Form, Button, Container, Card, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import { Form, Button, Container, Card, Spinner } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 import { login } from "../../reduxStore/authSlice";
@@ -9,8 +10,7 @@ import Footer from "../../components/layout/Footer";
 const SignUpPage = () => {
     const [formData, setFormData] = useState({ email: "", password: "", confirmPassword: "" });
     const [loading, setLoading] = useState(false);
-    const [toast, setToast] = useState({ show: false, message: "", variant: "", textColor: "" });
-
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const API_KEY = import.meta.env.VITE_USER_FIREBASE_AUTH_API_KEY;
@@ -20,30 +20,15 @@ const SignUpPage = () => {
  
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(formData.email)) {
-            setToast({
-                show: true,
-                message: "Please enter a valid email address ",
-                variant: "danger",
-                textColor: "text-white",
-            });
+            toast.error("Please enter a valid email address");
             return;
         }
         if (formData.password.length < 6) {
-            setToast({
-                show: true,
-                message: "Password must be at least 6 characters long ",
-                variant: "warning",
-                textColor: "text-dark",
-            });
+            toast.error("Password must be at least 6 characters long");
             return;
         }
         if (formData.password !== formData.confirmPassword) {
-            setToast({
-                show: true,
-                message: "Passwords do not match",
-                variant: "danger",
-                textColor: "text-white",
-            });
+            toast.error("Password do not match");
             return;
         }
 
@@ -68,21 +53,11 @@ const SignUpPage = () => {
 
             dispatch(login({ token: data.idToken, email: data.email }));
 
-            setToast({
-                show: true,
-                message: "Account created successfully!",
-                variant: "success",
-                textColor: "text-white",
-            });
+            toast.success("Account created successfully");
 
             setTimeout(() => navigate("/login"), 1000);
         } catch (error) {
-            setToast({
-                show: true,
-                message: error.message || "Signup failed. Try again.",
-                variant: "danger",
-                textColor: "text-white ",
-            });
+            toast.error(error.message || "Signup failed. Try again.");
         } finally {
             setLoading(false);
         }
@@ -90,17 +65,6 @@ const SignUpPage = () => {
 
     return (
         <>
-            <ToastContainer position="top-center" className="toast-float">
-                <Toast
-                    bg={toast.variant}
-                    show={toast.show}
-                    onClose={() => setToast({ ...toast, show: false })}
-                    delay={3000}
-                    autohide
-                >
-                    <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
-                </Toast>
-            </ToastContainer>
             <Header />
             <Container
                 fluid

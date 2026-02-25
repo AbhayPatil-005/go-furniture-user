@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Card, Button, Spinner, Container, Row, Col, Toast, ToastContainer } from "react-bootstrap";
+import { Card, Button, Spinner, Container, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../reduxStore/cartSlice";
@@ -11,9 +12,9 @@ const CategoryPage =()=>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [toast, setToast] = useState({ show: false, message: "", variant: "", textColor: "" });
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); 
     const [products, setProducts] = useState([]);
+    
     useEffect(() => {
         const fetchCategoryProducts = async () => {
             setLoading(true);
@@ -32,12 +33,26 @@ const CategoryPage =()=>{
                 setProducts(filtered);
             } catch (err) {
                 console.error("Error:", err);
+                toast.error("Failed to load products. Please try again.");
             } finally {
                 setLoading(false);
             }
         };
         fetchCategoryProducts();
     }, [categoryName]);
+
+    const handleAddToCart = (product) =>{
+        dispatch(
+            addToCart({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+                stock: product.quantity,
+            })
+        );
+        toast.success(`${product.name} added to cart 🛒`);
+    }
 
     if (loading)
         return (
@@ -47,17 +62,6 @@ const CategoryPage =()=>{
         );
 
     return (<>
-        <ToastContainer position="top-center" className="toast-float">
-            <Toast
-                bg={toast.variant}
-                show={toast.show}
-                onClose={() => setToast({ ...toast, show: false })}
-                delay={3000}
-                autohide
-            >
-                <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
-            </Toast>
-        </ToastContainer>
         <Container className="mt-4">
             <h3 className="mb-4 text-capitalize border-bottom pb-2">{categoryName.replace(/-/g, " ")}</h3>
 
@@ -92,19 +96,7 @@ const CategoryPage =()=>{
                                 <Button
                                     variant="success"
                                     className="w-100"
-                                    onClick={() => dispatch(addToCart({
-                                            id: product.id,
-                                            name: product.name,
-                                            price: product.price,
-                                            imageUrl: product.imageUrl,
-                                        },
-                                        setToast({
-                                            show:"true",
-                                            message:`Added ${product.name} to cart`,
-                                            variant:"success",
-                                            textColor:"text-white text-center fw-bolder"
-                                        })))
-                                    }
+                                    onClick={() => handleAddToCart(product)}
                                 >
                                     Add to Cart
                                 </Button>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Card, Toast, ToastContainer } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../reduxStore/authSlice";
 import { clearCart } from "../reduxStore/cartSlice";
@@ -20,14 +21,6 @@ const ProfilePage=()=>{
     const [addresses, setAddresses] = useState([]);
     const [editingAddress, setEditingAddress] = useState(null);
     const [isAddingNew, setIsAddingNew] = useState(false); 
-    const [loading, setLoading] = useState(false);
-
-    const [toast, setToast] = useState({
-        show: false,
-        message: "",
-        variant: "",
-        textColor: ""
-    });
 
     useEffect(()=>{
         if(!userEmail) return;
@@ -48,12 +41,7 @@ const ProfilePage=()=>{
         });
 
         setAddresses((prev)=>prev.filter((adr)=>adr.id !== id ));
-        setToast({
-            show:true,
-            message:"Address deleted successfully",
-            variant:"danger",
-            textColor:"text-white"
-        });
+        toast.success("Address deleted successfully");
     };
 
     const handleEdit = (addr)=>{
@@ -62,8 +50,6 @@ const ProfilePage=()=>{
     };
 
     const saveEditedAddress=async(id, updatedAddress)=>{
-        setLoading(true);
-
         await fetch(`${BASE_URL}/users/${safeEmail}/addresses/${id}.json`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -73,19 +59,10 @@ const ProfilePage=()=>{
         setAddresses((prev)=>
             prev.map((a)=>(a.id === id?{...a,...updatedAddress}:a))
         );
-
-        setLoading(false);
         setEditingAddress(null); 
-
-        setToast({
-            show:true,
-            message:"Address updated successfully",
-            variant:"success",
-            textColor:"text-white"
-        });
+        toast.success("Address updated successfully");
     };
     const saveNewAddress = async (newAddress) => {
-        setLoading(true);
 
         const res = await fetch(`${BASE_URL}/users/${safeEmail}/addresses.json`, {
             method: "POST",
@@ -97,16 +74,8 @@ const ProfilePage=()=>{
         const newId = data.name; 
 
         setAddresses((prev) => [...prev, { id: newId, ...newAddress }]);
-
-        setLoading(false);
         setIsAddingNew(false);
-
-        setToast({
-            show: true,
-            message: "Address added successfully!",
-            variant: "success",
-            textColor: "text-white"
-        });
+        toast.success("New address updated successfully");
     };
 
     const handleLogout =()=>{
@@ -121,20 +90,6 @@ const ProfilePage=()=>{
             <Navbar />
             <div className="main-content">
                 <div className="container py-4 w-50">
-                    <ToastContainer position="top-center" className="toast-float">
-                        <Toast
-                            bg={toast.variant}
-                            show={toast.show}
-                            onClose={() => setToast({ ...toast, show: false })}
-                            autohide
-                            delay={2500}
-                        >
-                            <Toast.Body className={toast.textColor + " text-center"}>
-                                {toast.message}
-                            </Toast.Body>
-                        </Toast>
-                    </ToastContainer>
-
                     <h3 className="mb-4">
                         My Profile
                     </h3>

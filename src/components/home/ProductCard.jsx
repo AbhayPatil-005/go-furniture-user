@@ -1,60 +1,34 @@
-import { Card, Button, Toast, ToastContainer, Badge } from "react-bootstrap";
+import { Card, Button, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../../reduxStore/cartSlice";
-import { useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const ProductCard=({product})=>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const cartItems = useSelector((state)=>state.cart.items);
     const isOutOfStock = product.quantity <= 0; 
-    const [toast, setToast] = useState({
-        show:false, message:"", variant:"", textColor:""
-    });
 
     const handleAdd=()=>{
         const existing = cartItems.find(item=>item.id === product.id)
         if (existing && existing.cartQuantity >= product.quantity) {
-            setToast({
-                show:true, 
-                message:`Only ${product.quantity} available in stock`,
-                variant:'warning',
-                textColor:'text-dark text-center',
-            })
+            toast.warning(`Only ${product.quantity} available in stock`);
             return;
         };
-            dispatch(
-                addToCart({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    imageUrl: product.imageUrl,
-                    stock: product.quantity,
-                })
-            );
-
-            setToast({
-                show:true, 
-                message:`Added ${product.name} to cart`,
-                variant:'success',
-                textColor:'text-white text-center ',
+        dispatch(
+            addToCart({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+                stock: product.quantity,
             })
-        
+        );
+        toast.success(`${product.name} added to cart 🛒`);
     }
 
     return (<>
-        <ToastContainer position="top-center" className="toast-float">
-            <Toast
-                bg={toast.variant}
-                show={toast.show}
-                onClose={() => setToast({ ...toast, show: false })}
-                autohide
-                delay={2000}
-            >
-                <Toast.Body className={toast.textColor}>{toast.message}</Toast.Body>
-            </Toast>
-        </ToastContainer>
         <Card
             className="shadow-sm h-100 product-card"
             style={{ cursor: "pointer" }}

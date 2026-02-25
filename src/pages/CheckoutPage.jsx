@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Card, Button, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import { Card, Button, Spinner } from "react-bootstrap";
+import { toast } from "react-toastify";
 import AddressForm from "../components/home/AddressForm";
 import AddressSelector from "../components/home/AddressSelector";
 import { clearCart } from "../reduxStore/cartSlice";
@@ -20,13 +21,6 @@ const CheckoutPage =()=>{
     const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [loading, setLoading] = useState(false);
-
-    const [toast, setToast] = useState({
-        show: false,
-        message: "",
-        variant: "",
-        textColor: "",
-    });
 
     if (!userEmail) {
         return (
@@ -56,23 +50,12 @@ const CheckoutPage =()=>{
         setAddresses(prev => [...prev, addr]);
         setSelectedAddress(addr);
 
-        setToast({
-            show: true,
-            message: "Address added successfully!",
-            variant: "success",
-            textColor: "text-white"
-        });
+        toast.success("Address added successfully");
     };
 
     const placeOrder = async () => {
         if (!selectedAddress) {
-            setToast({
-                show: true,
-                variant: "danger",
-                message: "Please select or add a delivery address.",
-                textColor: "text-white",
-            });
-
+            toast.warning("Please select or add a delivery address.");
             addressRef.current?.scrollIntoView({ behavior: "smooth" });
             return;
         }
@@ -92,12 +75,7 @@ const CheckoutPage =()=>{
                 const want = Number(cartItem.cartQuantity ?? cartItem.quantity ?? 1);
 
                 if (want > available) {
-                    setToast({
-                        show: true,
-                        variant: "danger",
-                        message: `Only ${available} left for "${cartItem.name}". Reduce quantity or remove it.`,
-                        textColor: "text-white",
-                    });
+                    toast.warning(`Only ${available} left for "${cartItem.name}". Reduce quantity or remove it.`)
                     setLoading(false);
                     return; 
                 }
@@ -133,46 +111,21 @@ const CheckoutPage =()=>{
                 body: JSON.stringify(orderData),
             });
 
-            setToast({
-                show: true,
-                variant: "success",
-                message: "Your order has been placed successfully",
-                textColor: "text-white",
-            });
+            toast.success("Your order has been placed successfully");
 
             dispatch(clearCart());
             navigate("/thank-you");
 
-            setTimeout(() => navigate("/thank-you"), 600);
-
         } catch (err) {
             console.error("placeOrder error:", err);
-            setToast({
-                show: true,
-                variant: "danger",
-                message: "Failed to place order — try again.",
-                textColor: "text-white",
-            });
+            toast.error("Failed to place order — try again.")
             setLoading(false);
             }
         }   
     
     return (<>
         <div className="container py-4">
-            <ToastContainer position="top-center" className="toast-float">
-                <Toast
-                    bg={toast.variant}
-                    show={toast.show}
-                    onClose={() => setToast({ ...toast, show: false })}
-                    autohide
-                    delay={2500}
-                >
-                    <Toast.Body className={`${toast.textColor} text-center`} >{toast.message}</Toast.Body>
-                </Toast>
-            </ToastContainer>
-
             <h3 className="mb-4">Checkout</h3>
-
             <div className="row">
                 <div className="col-md-6">
                     <Card className="p-3">

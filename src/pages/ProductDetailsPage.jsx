@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Spinner, Button, Card, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../reduxStore/cartSlice";
-import { Toast, ToastContainer } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const ProductDetailsPage=()=>{
     const { id } = useParams();
@@ -13,8 +13,6 @@ const ProductDetailsPage=()=>{
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [toast, setToast] = useState({show:false, message:"", variant:"",textColor:""});
-
     const dispatch = useDispatch();
     
     useEffect(() => {
@@ -35,12 +33,7 @@ const ProductDetailsPage=()=>{
     const handleAdd = () => {
         const existing = cartItems.find((i) => i.id === id);
         if (existing && existing.cartQuantity >= product.quantity) {
-            setToast({
-                show: true,
-                message: `Only ${product.quantity} available in stock`,
-                variant: "warning",
-                textColor: "text-dark",
-            });
+            toast.warning(`Only ${product.quantity} available in stock`);
             return;
         }
         dispatch(addToCart({
@@ -50,12 +43,8 @@ const ProductDetailsPage=()=>{
             imageUrl: product.imageUrl,
             stock: product.quantity
         }));
-        setToast({
-            show: true,
-            message: `${product.name} added to cart`,
-            variant: "success",
-            textColor: "text-white",
-        });
+        // toast notification
+        toast.success(`${product.name} added to cart 🛒`);
     };
 
     if (loading)
@@ -70,17 +59,6 @@ const ProductDetailsPage=()=>{
     const isOutOfStock = product.quantity <= 0;
 
     return (<>
-        <ToastContainer position="top-center" className="toast-float">
-            <Toast
-                bg={toast.variant}
-                show={toast.show}
-                onClose={() => setToast({ ...toast, show: false })}
-                autohide
-                delay={2000}
-            >
-                <Toast.Body className={`${toast.textColor} text-center`}>{toast.message}</Toast.Body>
-            </Toast>
-        </ToastContainer>
         <Container fluid className="py-4 bg-light mt-0">
             <Button variant="outline-secondary" className="mx-5 mb-3" onClick={() => navigate(-1)}>
                 ← Back
