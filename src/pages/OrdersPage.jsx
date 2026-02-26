@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Card, Spinner } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const OrdersPage = () => {
   const BASE_URL = import.meta.env.VITE_USER_FIREBASE_BASE_URL;
@@ -25,7 +26,7 @@ const OrdersPage = () => {
           setOrders(formatted.reverse());
         }
       } catch (err) {
-        console.log("Failed to load orders:" + err.message);
+        toast.error("Failed to load orders. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -33,7 +34,6 @@ const OrdersPage = () => {
 
     fetchOrders();
   }, [userEmail]);
-  console.log("orders fetched")
   
   if (loading)
     return (
@@ -65,7 +65,7 @@ const OrdersPage = () => {
             <ul>
               {order.items.map((item) => (
                 <li key={item.id}>
-                  {item.name} x {item.stock}
+                  {item.name} x {item.cartQuantity}
                 </li>
               ))}
             </ul>
