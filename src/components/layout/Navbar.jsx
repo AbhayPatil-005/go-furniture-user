@@ -12,7 +12,7 @@ const Navbar=()=>{
     ];
 
     return (<>
-        <nav className="bg-light border-bottom py-2">
+        <nav className="category-navbar bg-light border-bottom py-2">
             <Container className="d-flex gap-4">
                 {categories.map((c) => (
                     <NavLink
