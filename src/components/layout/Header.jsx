@@ -2,6 +2,7 @@ import { Container, Form, Button, Badge } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import { useDebounce } from "../../hooks/useDebounce";
 import CartModal from "../home/CartModal";
 import MobileSidebar from "./MobileSidebar";
 
@@ -17,14 +18,12 @@ const Header = () => {
     const [showCart, setShowCart] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false); 
 
-    const handleSearch = (e) => {
-        e.preventDefault();
+    const performSearch = () => {
         if (!query.trim()) return;
-
         navigate(`/search?query=${query}`);
-        setQuery("");
-        console.log("1234")
     };
+
+    useDebounce(performSearch, 500, [query]);
 
   return (
     <>
@@ -67,7 +66,7 @@ const Header = () => {
           </div>
 
           <div className="d-flex d-md-none mt-2">
-            <Form className="d-flex w-100" onSubmit={handleSearch}>
+            <Form className="d-flex w-100">
               <Form.Control
                 type="search"
                 placeholder="Search furniture..."
@@ -75,7 +74,6 @@ const Header = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
-              <Button variant="dark" type="submit">Go</Button>
             </Form>
           </div>
 
@@ -91,7 +89,7 @@ const Header = () => {
               </span>
             </div>
 
-            <Form className="d-flex flex-grow-1" onSubmit={handleSearch}>
+            <Form className="d-flex flex-grow-1">
               <Form.Control
                 type="search"
                 placeholder="Search for furniture, wardrobes, sofas..."
@@ -99,7 +97,6 @@ const Header = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
-              <Button variant="dark" type="submit">Search</Button>
             </Form>
 
             <div
