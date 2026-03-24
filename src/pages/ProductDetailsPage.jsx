@@ -73,7 +73,7 @@ const ProductDetailsPage=()=>{
                 justify-content-evenly
                 ">
                 
-                <div className="text-center">
+                <div className="product-detail-image-container">
                     <img
                         className="img-fluid "
                         src={product.imageUrl}
